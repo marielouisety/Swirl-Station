@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Fredoka';
+  src: url('/src/fonts/fredoka/Fredoka-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Fredoka';
+  src: url('/src/fonts/fredoka/Fredoka-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Fredoka';
+  src: url('/src/fonts/fredoka/Fredoka-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Fredoka';
+  src: url('/src/fonts/fredoka/Fredoka-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@theme {
+  --font-fredoka: "Fredoka", sans-serif;
+
+  --color-swirl-bg: #EBD5B3;
+  --color-swirl-cream: #FCF5DF;
+  --color-swirl-brown: #6D4128;
+  --color-swirl-accent: #C5957C;
+}
+
+html {
+  scroll-behavior: smooth;
+}
