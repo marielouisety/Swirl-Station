@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const Navbar = () => (
   <div className="sticky top-0 z-50">
     <nav className="flex justify-between items-center px-12 py-4 bg-swirl-cream font-fredoka shadow-sm">
@@ -77,18 +79,24 @@ const Featured = () => (
 );
 
 const Menu = () => {
+  const [selectedFlavor, setSelectedFlavor] = useState(null);
+
   const items = [
-    { name: "Chocolate", sub: "HEAVEN", img: "chocolate.png" },
-    { name: "Strawberries", sub: "& CREAM", img: "strawberry.png" },
-    { name: "Biscoff", sub: "BUTTER", img: "biscoff.png" },
+    { id: 1, name: "Chocolate", sub: "HEAVEN", img: "chocolate.png" },
+    { id: 2, name: "Strawberries", sub: "& CREAM", img: "strawberry.png" },
+    { id: 3, name: "Biscoff", sub: "BUTTER", img: "biscoff.png" },
   ];
 
   return (
-    <section id="menu-section" className="container mx-auto px-20 py-20 font-fredoka">
+    <section id="menu-section" className="container mx-auto px-20 py-20 font-fredoka scroll-mt-32">
       <h2 className="text-4xl font-black text-swirl-brown mb-10">Menu</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {[...items, ...items].map((item, index) => (
-          <div key={index} className="bg-swirl-cream rounded-[40px] p-6 flex flex-col items-center shadow-lg hover:shadow-2xl transition-shadow group">
+        {items.map((item) => (
+          <div 
+            key={item.id} 
+            onClick={() => setSelectedFlavor(item)} // Open Modal on Click
+            className="bg-swirl-cream rounded-[40px] p-6 flex flex-col items-center shadow-lg hover:shadow-2xl transition-all cursor-pointer group"
+          >
             <div className="w-full aspect-square overflow-hidden mb-4">
               <img 
                 src={`src/assets/${item.img}`} 
@@ -96,10 +104,81 @@ const Menu = () => {
                 className="w-full h-full object-contain group-hover:scale-110 transition duration-500" 
               />
             </div>
+            
           </div>
         ))}
       </div>
+
+      {selectedFlavor && (
+        <OrderModal 
+          flavor={selectedFlavor} 
+          onClose={() => setSelectedFlavor(null)} 
+        />
+      )}
     </section>
+  );
+};
+
+const OrderModal = ({ flavor, onClose }) => {
+  const [quantity, setQuantity] = useState(1);
+  const [size, setSize] = useState("1pc"); // Default selection
+
+  const prices = {
+    "1pc": 59,
+    "box4": 229,
+    "box6": 339
+  };
+
+  const handleAddToCart = () => {
+    console.log(`Added ${quantity} x ${size} of ${flavor.name} to cart.`);
+    onClose(); 
+  };
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+      <div className="bg-swirl-cream w-full max-w-md rounded-[40px] overflow-hidden shadow-2xl relative animate-in fade-in zoom-in duration-300">
+        
+        <button onClick={onClose} className="absolute top-6 right-6 text-swirl-brown text-2xl hover:rotate-90 transition">✕</button>
+
+        <div className="p-8 flex flex-col items-center">
+          <img src={`src/assets/${flavor.img}`} alt={flavor.name} className="w-48 h-48 object-contain mb-4" />
+
+          <div className="w-full space-y-3 mb-8">
+            {[
+              { id: "1pc", label: "1 pc", price: 59 },
+              { id: "box4", label: "Box of 4", price: 229 },
+              { id: "box6", label: "Box of 6", price: 339 }
+            ].map((option) => (
+              <button
+                key={option.id}
+                onClick={() => setSize(option.id)}
+                className={`w-full flex justify-between items-center px-6 py-4 rounded-2xl border-2 transition ${
+                  size === option.id ? "border-swirl-brown bg-swirl-brown text-white" : "border-swirl-brown/10 hover:border-swirl-brown/30"
+                }`}
+              >
+                <span className="font-bold">{option.label}</span>
+                <span className="font-black">₱{option.price}</span>
+              </button>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-6 w-full">
+            <div className="flex items-center bg-white rounded-full px-4 py-2 shadow-inner border border-swirl-brown/10">
+              <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="text-2xl font-bold text-swirl-brown px-2">-</button>
+              <span className="text-xl font-bold text-swirl-brown w-8 text-center">{quantity}</span>
+              <button onClick={() => setQuantity(quantity + 1)} className="text-2xl font-bold text-swirl-brown px-2">+</button>
+            </div>
+            
+            <button 
+              onClick={handleAddToCart}
+              className="flex-1 bg-swirl-brown text-white py-4 rounded-full font-bold text-lg shadow-lg hover:scale-[1.02] active:scale-95 transition"
+            >
+              Add to Cart — ₱{prices[size] * quantity}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
