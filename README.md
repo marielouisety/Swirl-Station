@@ -1,4 +1,4 @@
-# Swirl Station: A Cinnamon Roll-Ordering App for Swirl Station
+# Swirl Station: A Food-ordering Website for Swirl Station
 
 A project in Software and Quality Assurance (SQA)
 
