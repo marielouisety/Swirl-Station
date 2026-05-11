@@ -1,4 +1,6 @@
-# React + TypeScript + Vite
+# Swirl Station: A Cinnamon Roll-Ordering App for Swirl Station
+
+A project in Software and Quality Assurance (SQA)
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
