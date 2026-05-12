@@ -3,8 +3,17 @@ import AuthPage from "./Login";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
 import MenuPage from "./Menu";
+import CheckoutModal from "./Checkout";
+import OrderHistory from "./OrderHistory";
 
-const Navbar = ({ onLoginClick, user, setView }: { onLoginClick: () => void; user: any; setView: (v: "home" | "menu") => void }) => {
+const Navbar = ({ onLoginClick, user, setView, cartCount, onCartClick, onOrdersClick }: { 
+  onLoginClick: () => void; 
+  user: any; 
+  setView: (v: "home" | "menu") => void;
+  cartCount: number; 
+  onCartClick: () => void;
+  onOrdersClick: () => void;
+}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false); // dropdown for logout
   const displayName = user?.email ? user.email.split('@')[0] : "";
 
@@ -31,9 +40,19 @@ const Navbar = ({ onLoginClick, user, setView }: { onLoginClick: () => void; use
         <button className="hover:text-white transition cursor-pointer">About Us</button>
         <button className="hover:text-white transition cursor-pointer">Contact Us</button>
         
-        <div className="flex gap-6 items-center ml-4">
-            <span className="cursor-pointer hover:scale-110 transition text-2xl">🛒</span>
-            
+        <div className="relative flex items-center">
+          <button 
+            onClick={onCartClick} 
+            className="cursor-pointer hover:scale-110 transition text-2xl relative"
+          >
+            🛒
+            {cartCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full shadow-lg border-2 border-swirl-brown animate-in zoom-in">
+                {cartCount}
+              </span>
+            )}
+          </button>
+
             {user ? (
               /* --- LOGGED IN: Profile Icon + Dropdown --- */
               <div className="relative">
@@ -53,7 +72,7 @@ const Navbar = ({ onLoginClick, user, setView }: { onLoginClick: () => void; use
                       <p className="text-swirl-brown text-sm truncate font-bold lowercase">{user.email}</p>
                     </div>
                     
-                    <button className="w-full text-left px-4 py-3 text-swirl-brown hover:bg-swirl-cream/50 transition font-bold text-sm">
+                    <button onClick={onOrdersClick} className="w-full text-left px-4 py-3 text-swirl-brown hover:bg-swirl-cream/50 transition font-bold text-sm">
                       My Orders
                     </button>
                     
@@ -92,6 +111,64 @@ const Navbar = ({ onLoginClick, user, setView }: { onLoginClick: () => void; use
   )
 };
 
+const CartDrawer = ({ isOpen, onClose, items, onRemove, onUpdateQuantity, onCheckout }: any) => {
+  const total = items.reduce((sum: number, item: any) => sum + item.totalPrice, 0);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[150] flex justify-end">
+      {/* Dark Overlay */}
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
+      
+      {/* Side Panel */}
+      <div className="relative w-full max-w-md bg-swirl-cream h-full shadow-2xl p-8 flex flex-col animate-in slide-in-from-right duration-300">
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-3xl font-black text-swirl-brown uppercase">Your Tray</h2>
+          <button onClick={onClose} className="text-2xl">✕</button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto space-y-4">
+          {items.length === 0 ? (
+            <p className="text-center text-swirl-brown/40 font-bold mt-20">Your tray is empty!</p>
+          ) : (
+            items.map((item: any) => (
+              <div key={item.cartId} className="bg-white p-4 rounded-3xl flex gap-4 items-center border border-swirl-brown/5">
+                <img src={`src/assets/${item.img}`} className="w-16 h-16 object-contain" />
+                <div className="flex-1">
+                  <h4 className="font-black text-swirl-brown leading-tight">{item.name}</h4>
+                  <p className="text-xs font-bold text-swirl-brown/50 uppercase">{item.selectedSize}</p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <button onClick={() => onUpdateQuantity(item.cartId, -1)} className="w-6 h-6 rounded-full bg-swirl-brown/10 text-swirl-brown font-black text-sm flex items-center justify-center hover:bg-swirl-brown hover:text-white transition">-</button>
+                    <span className="text-sm font-black text-swirl-brown w-4 text-center">{item.quantity}</span>
+                    <button onClick={() => onUpdateQuantity(item.cartId, 1)} className="w-6 h-6 rounded-full bg-swirl-brown/10 text-swirl-brown font-black text-sm flex items-center justify-center hover:bg-swirl-brown hover:text-white transition">+</button>
+                  </div>
+                </div>
+                <p className="font-black text-swirl-brown">₱{item.totalPrice}</p>
+                <button onClick={() => onRemove(item.cartId)} className="text-red-400 hover:text-red-600">✕</button>
+              </div>
+            ))
+          )}
+        </div>
+
+        <div className="border-t border-swirl-brown/10 pt-6 mt-6">
+          <div className="flex justify-between items-center mb-6">
+            <span className="font-bold text-swirl-brown/60 uppercase text-sm">Total Amount</span>
+            <span className="text-3xl font-black text-swirl-brown">₱{total}</span>
+          </div>
+          <button
+            onClick={onCheckout}
+            disabled={items.length === 0}
+            className="w-full bg-swirl-brown text-white py-4 rounded-full font-black shadow-lg hover:scale-[1.02] transition disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            Proceed to Checkout
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};  
+
 const Header = () => (
   <header className="relative min-h-[800px] pt-10 pb-24 font-fredoka font-bold flex flex-col justify-center items-center bg-cover bg-center"
           style={{ backgroundImage: "url('src/assets/final-bg-1.png')" }}> 
@@ -101,9 +178,9 @@ const Header = () => (
       <div className="flex-1 space-y-6 max-w-lg mb-10 md:mb-0"> 
         <h1 className="text-5xl font-fredoka text-swirl-brown leading-[1.1]">
           your stop for
-          <h1 className="text-6xl font-gloock text-swirl-brown leading-[1.1]">
-          <span className="text-8xl">cinnamon swirls</span>
-          </h1>
+          <span className="block text-6xl font-gloock text-swirl-brown leading-[1.1]">
+            <span className="text-8xl">cinnamon swirls</span>
+          </span>
         </h1>
         
         <p className="text-swirl-brown font-semibold text-xl uppercase tracking-wide opacity-80">
@@ -254,9 +331,14 @@ const Footer = () => (
   </footer>
 );
 
-const OrderModal = ({ flavor, onClose }: { flavor: any; onClose: () => void }) => {
+// 1. Add 'onConfirm' to the props
+const OrderModal = ({ flavor, onClose, onConfirm }: { 
+  flavor: any; 
+  onClose: () => void; 
+  onConfirm: (item: any, size: string, quantity: number) => void 
+}) => {
   const [quantity, setQuantity] = useState(1);
-  const [size, setSize] = useState("1 pc");
+  const [size, setSize] = useState("1pc"); // Note: removed space to match your keys
   const prices: { [key: string]: number } = { "1pc": flavor.price || 59, "box4": 229, "box6": 339 };
 
   return (
@@ -281,7 +363,11 @@ const OrderModal = ({ flavor, onClose }: { flavor: any; onClose: () => void }) =
             <span className="text-xl font-bold w-8 text-center">{quantity}</span>
             <button onClick={() => setQuantity(quantity + 1)} className="text-2xl px-2 font-black">+</button>
           </div>
-          <button onClick={onClose} className="flex-1 bg-swirl-brown text-white py-4 rounded-full font-bold shadow-lg">
+          {/* 2. UPDATE THIS BUTTON: call onConfirm */}
+          <button 
+            onClick={() => onConfirm(flavor, size, quantity)} 
+            className="flex-1 bg-swirl-brown text-white py-4 rounded-full font-bold shadow-lg hover:brightness-110 transition"
+          >
             Add to Cart — ₱{prices[size] * quantity}
           </button>
         </div>
@@ -295,6 +381,36 @@ export default function App() {
   const [showAuth, setShowAuth] = useState(false);
   const [selectedFlavor, setSelectedFlavor] = useState<any>(null); // Lifted state up
   const [user, setUser] = useState<any>(null);
+  const [cart, setCart] = useState<any[]>([]); 
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [isOrderHistoryOpen, setIsOrderHistoryOpen] = useState(false);
+
+  const addToCart = (item: any, size: string, quantity: number) => {
+    const newItem = {
+      ...item,
+      selectedSize: size,
+      quantity,
+      // Calculate price based on size if it exists, otherwise use base price
+      totalPrice: (item.prices ? item.prices[size] : item.price) * quantity,
+      cartId: Date.now() // unique ID for the cart list
+    };
+    setCart([...cart, newItem]); // This is where setCart is used!
+    setIsCartOpen(true); // Automatically open the cart drawer to show the item
+  };
+
+  const removeFromCart = (cartId: number) => {
+    setCart(cart.filter(item => item.cartId !== cartId));
+  };
+
+  const updateQuantity = (cartId: number, delta: number) => {
+    setCart(cart.map(item => {
+      if (item.cartId !== cartId) return item;
+      const newQty = Math.max(1, item.quantity + delta);
+      const unitPrice = item.prices ? item.prices[item.selectedSize] : item.price;
+      return { ...item, quantity: newQty, totalPrice: unitPrice * newQty };
+    }));
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -311,6 +427,9 @@ export default function App() {
         user={user}
         onLoginClick={() => setShowAuth(true)} 
         setView={setView}
+        cartCount={cart.length}
+        onCartClick={() => setIsCartOpen(true)}
+        onOrdersClick={() => setIsOrderHistoryOpen(true)}
       />
 
       {view === "home" ? (
@@ -318,7 +437,7 @@ export default function App() {
           <Header />
         </>
       ) : (
-        <MenuPage />
+        <MenuPage onAddToCart={addToCart} />
       )}
 
       <Featured />
@@ -329,9 +448,37 @@ export default function App() {
       
       <Footer />
 
-      {/* Render Modals over everything */}
+      <CartDrawer 
+        isOpen={isCartOpen} 
+        onClose={() => setIsCartOpen(false)} 
+        items={cart} 
+        onRemove={removeFromCart}
+        onUpdateQuantity={updateQuantity}
+        onCheckout={() => { setIsCartOpen(false); if (user) { setIsCheckoutOpen(true); } else { setShowAuth(true); } }}
+      />
+
+      {isCheckoutOpen && (
+        <CheckoutModal
+          items={cart}
+          total={cart.reduce((sum, item) => sum + item.totalPrice, 0)}
+          onClose={() => setIsCheckoutOpen(false)}
+          onSuccess={() => { setIsCheckoutOpen(false); setCart([]); }}
+          userId={user?.uid ?? ""}
+        />
+      )}
+
       {selectedFlavor && (
-        <OrderModal flavor={selectedFlavor} onClose={() => setSelectedFlavor(null)} />
+        <OrderModal 
+          flavor={selectedFlavor} 
+          onClose={() => setSelectedFlavor(null)} 
+          onConfirm={(item, size, qty) => {
+            addToCart(item, size, qty);
+            setSelectedFlavor(null); // Close modal after adding
+          }}
+        />
+      )}
+      {isOrderHistoryOpen && user && (
+        <OrderHistory userId={user.uid} onClose={() => setIsOrderHistoryOpen(false)} />
       )}
       {showAuth && <AuthPage onClose={() => setShowAuth(false)} />}
     </div>

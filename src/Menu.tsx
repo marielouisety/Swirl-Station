@@ -10,10 +10,11 @@ const menuData = [
   { id: 7, name: "Assorted Bites", category: "Bites", price: 269, img: "classic-bites.png" }, 
 ];
 
-export default function MenuPage() {
+export default function MenuPage({ onAddToCart }: { onAddToCart: (item: any, size: string, quantity: number) => void }) {
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFlavor, setSelectedFlavor] = useState<any>(null);
+
 
   const filteredItems = menuData.filter(item => {
     const matchesCategory = activeCategory === "All" || item.category === activeCategory;
@@ -73,13 +74,22 @@ export default function MenuPage() {
         })}
       </div>
 
-      {selectedFlavor && <OrderModal flavor={selectedFlavor} onClose={() => setSelectedFlavor(null)} />}
+      {selectedFlavor && (
+        <OrderModal 
+          flavor={selectedFlavor} 
+          onClose={() => setSelectedFlavor(null)} 
+          onConfirm={(flavor, size, quantity) => {
+            onAddToCart(flavor, size, quantity);
+            setSelectedFlavor(null);
+          }}
+        />
+      )}
     </div>
-  );
-}
+  )}
 
 /* --- INTERNAL MODAL COMPONENT --- */
-function OrderModal({ flavor, onClose }: { flavor: any; onClose: () => void }) {
+function OrderModal({ flavor, onClose, onConfirm }: { flavor: any; onClose: () => void; onConfirm: (f: any, s: string, q: number) => void }) {
+  const [quantity, setQuantity] = useState(1);
   const [size, setSize] = useState(flavor.prices?.["1pc"] ? "1pc" : "box4");
   const currentPrice = flavor.prices ? flavor.prices[size] : flavor.price;
 
@@ -87,23 +97,48 @@ function OrderModal({ flavor, onClose }: { flavor: any; onClose: () => void }) {
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
       <div className="bg-swirl-cream w-full max-w-md rounded-[40px] p-8 relative animate-in zoom-in duration-300">
         <button onClick={onClose} className="absolute top-6 right-6 text-swirl-brown text-2xl hover:rotate-90 transition">✕</button>
+        
         <div className="flex flex-col items-center mb-6">
-          <img src={`src/assets/${flavor.img}`} className="w-40 h-40 object-contain mb-4" />
+          <img src={`src/assets/${flavor.img}`} className="w-40 h-40 object-contain mb-4" alt={flavor.name} />
           <h2 className="text-3xl font-black text-swirl-brown text-center uppercase leading-tight">{flavor.name}</h2>
         </div>
+
+        {/* Size Selection */}
         {flavor.prices && (
           <div className="space-y-2 mb-8">
             {Object.entries(flavor.prices).map(([id, p]: [string, any]) => (
-              <button key={id} onClick={() => setSize(id)} className={`w-full flex justify-between px-6 py-3 rounded-2xl border-2 transition ${size === id ? "border-swirl-brown bg-swirl-brown text-white" : "border-swirl-brown/10 bg-white text-swirl-brown"}`}>
-                <span className="font-bold">{id === "1pc" ? "Single Piece" : id === "box4" ? "Box of 4" : "Box of 6"}</span>
+              <button 
+                key={id} 
+                onClick={() => setSize(id)} 
+                className={`w-full flex justify-between px-6 py-3 rounded-2xl border-2 transition ${
+                  size === id ? "border-swirl-brown bg-swirl-brown text-white" : "border-swirl-brown/10 bg-white text-swirl-brown"
+                }`}
+              >
+                <span className="font-bold">
+                  {id === "1pc" ? "Single Piece" : id === "box4" ? "Box of 4" : "Box of 6"}
+                </span>
                 <span className="font-black">₱{p}</span>
               </button>
             ))}
           </div>
         )}
-        <button className="w-full bg-swirl-brown text-white py-4 rounded-full font-bold shadow-lg hover:brightness-110 transition">
-          Add to Cart — ₱{currentPrice}
-        </button>
+
+        <div className="flex items-center gap-4 w-full">
+          {/* Quantity Controls */}
+          <div className="flex items-center bg-white rounded-full px-4 py-2 border border-swirl-brown/10">
+            <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="text-xl px-2 font-black text-swirl-brown">-</button>
+            <span className="text-lg font-bold w-8 text-center text-swirl-brown">{quantity}</span>
+            <button onClick={() => setQuantity(quantity + 1)} className="text-xl px-2 font-black text-swirl-brown">+</button>
+          </div>
+
+          {/* THE CART BUTTON */}
+          <button 
+            onClick={() => onConfirm(flavor, size, quantity)} // This calls the function in App.tsx
+            className="flex-1 bg-swirl-brown text-white py-4 rounded-full font-bold shadow-lg hover:brightness-110 transition"
+          >
+            Add — ₱{currentPrice * quantity}
+          </button>
+        </div>
       </div>
     </div>
   );
