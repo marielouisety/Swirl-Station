@@ -39,9 +39,9 @@ const Navbar = ({ onLoginClick }: { onLoginClick: () => void }) => (
 
 const Header = () => (
   <header className="relative min-h-[800px] pt-10 pb-24 font-fredoka font-bold flex flex-col justify-center items-center bg-cover bg-center"
-          style={{ backgroundImage: "url('src/assets/bg-only.png')" }}> 
+          style={{ backgroundImage: "url('src/assets/final-bg-1.png')" }}> 
     
-    <div className="container mx-auto px-40 h-full flex flex-col md:flex-row items-center justify-between relative z-10">
+    <div className="container mx-auto px-60 h-full flex flex-col md:flex-row items-center justify-between relative z-10">
       
       <div className="flex-1 space-y-6 max-w-lg mb-10 md:mb-0"> 
         <h1 className="text-5xl font-fredoka text-swirl-brown leading-[1.1]">
@@ -61,7 +61,6 @@ const Header = () => (
       </div>
       
       <div className="flex-1 relative flex justify-center md:justify-end">
-        {/* Update to your box of 6 image from the screenshot */}
         <img 
           src="src/assets/assorted-6.png" 
           alt="Box of Swirls" 
@@ -81,7 +80,7 @@ const Header = () => (
 );
 
 const Featured = () => (
-  <section className="container mx-auto px-10 pt-32 pb-16 font-fredoka">
+  <section className="container mx-auto px-30 pt-32 pb-16 font-fredoka">
     <h2 className="text-4xl font-black text-swirl-brown mb-8 flex items-center gap-2">
       Featured ✨
     </h2>
@@ -101,7 +100,7 @@ const Bestsellers = ({ onSelectFlavor }: { onSelectFlavor: (flavor: any) => void
   ];
 
   return (
-    <section id="menu-section" className="container mx-auto px-10 py-16 font-fredoka scroll-mt-32">
+    <section id="menu-section" className="container mx-auto px-30 py-16 font-fredoka scroll-mt-32">
       <h2 className="text-4xl font-black text-swirl-brown mb-8 flex items-center gap-2">
         Bestsellers ✨
       </h2>
@@ -137,7 +136,7 @@ const Bestsellers = ({ onSelectFlavor }: { onSelectFlavor: (flavor: any) => void
 };
 
 const SweetMoments = () => (
-  <section className="container mx-auto px-10 py-16 font-fredoka overflow-hidden">
+  <section className="container mx-auto px-30 py-16 font-fredoka overflow-hidden">
     <div className="mb-8">
       <h2 className="text-4xl font-black text-swirl-brown mb-2">Sweet Moments with Swirl Station</h2>
       <p className="text-swirl-brown/70 font-medium">Tag @swirlstation.cebu on ig!</p>
@@ -243,8 +242,7 @@ export default function App() {
 
   return (
     <div 
-      className="min-h-screen bg-swirl-bg bg-cover bg-fixed font-fredoka selection:bg-swirl-brown selection:text-white scroll-smooth"
-      style={{ backgroundImage: "url('src/assets/bg-only.png')" }} 
+      className="min-h-screen bg-swirl-cream font-fredoka selection:bg-swirl-brown selection:text-white scroll-smooth"
     >
       <Navbar onLoginClick={() => setShowAuth(true)} />
       <Header />
