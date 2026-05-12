@@ -51,7 +51,7 @@ const AuthPage = ({ onClose }: { onClose: () => void }) => {
         <div className="text-center mb-8">
           <img src="src/assets/logo.png" alt="Logo" className="h-12 mx-auto mb-4" />
           <h2 className="text-3xl font-black text-swirl-brown uppercase tracking-tight">
-            {isForgotPassword ? "Reset Password" : isLogin ? "Welcome Back!" : "Join the Swirl"}
+            {isForgotPassword ? "Reset Password" : isLogin ? "Welcome Back!" : "Hop on the Ride!"}
           </h2>
         </div>
 
@@ -86,7 +86,7 @@ const AuthPage = ({ onClose }: { onClose: () => void }) => {
             <button 
               onClick={handleGoogleSignIn}
               type="button"
-              className="w-full flex items-center justify-center gap-3 border-2 border-swirl-brown/10 py-4 rounded-full font-bold hover:bg-white transition"
+              className="w-full flex items-center justify-center gap-3 border-2 border-swirl-brown/10 py-4 rounded-full hover:bg-white transition"
             >
               <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-5" />
               Continue with Google

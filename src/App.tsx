@@ -1,28 +1,33 @@
 import { useState } from "react";
-import AuthPage from "./Login"; // Import the login component
+import AuthPage from "./Login"; 
 
 const Navbar = ({ onLoginClick }: { onLoginClick: () => void }) => (
   <div className="sticky top-0 z-50">
-    <nav className="flex justify-between items-center px-12 py-4 bg-swirl-cream font-fredoka shadow-sm">
-      <img src="src/assets/logo.png" alt="Swirl Station Logo" className="h-10 w-auto" />
-      <div className="flex gap-15 items-center font-bold text-swirl-brown text-sm uppercase">
-        <a href="#" className="hover:opacity-70">Home</a>
-        <a href="#menu-section" className="hover:opacity-70">Menu</a>
-        <a href="#" className="hover:opacity-70">Contact Us</a>
+    <nav className="flex justify-between items-center px-12 py-4 bg-swirl-brown font-fredoka shadow-md text-swirl-cream">
+      <img src="src/assets/swirl-station-cream-logo.png" alt="Swirl Station Logo" className="h-10 w-auto" />
+      
+      <div className="flex gap-10 items-center font-bold text-sm uppercase">
+        <a href="#" className="hover:text-white transition">Home</a>
+        <a href="#menu-section" className="hover:text-white transition">Menu</a>
+        <a href="#" className="hover:text-white transition">About Us</a>
+        <a href="#" className="hover:text-white transition">Contact Us</a>
+        
+        <div className="flex gap-4 text-2xl items-center ml-4">
+          <span className="cursor-pointer hover:scale-110 transition">🛒</span>
+          <span className="cursor-pointer hover:scale-110 transition">👤</span>
+        </div>
+
         <button 
           onClick={onLoginClick}
-          className="bg-swirl-brown text-white px-6 py-2 rounded-full font-bold shadow-md active:scale-95 transition"
+          className="bg-swirl-cream text-swirl-brown px-8 py-2 rounded-full font-black shadow-md hover:scale-105 active:scale-95 transition ml-2"
         >
           Log In
         </button>
-        <div className="flex gap-4 text-xl">
-          <span className="cursor-pointer">🛒</span>
-          <span className="cursor-pointer">👤</span>
-        </div>
       </div>
     </nav>
 
-    <div className="w-full h-20" 
+    {/* The Scalloped Border underneath the navbar */}
+    <div className="w-full h-12" 
          style={{ 
            backgroundImage: "url('src/assets/banner.png')",
            backgroundRepeat: "repeat-x",
@@ -33,113 +38,194 @@ const Navbar = ({ onLoginClick }: { onLoginClick: () => void }) => (
 );
 
 const Header = () => (
-  <header className="relative min-h-[600px] pt-10 pb-10 overflow-hidden font-fredoka font-bold">
-    <div className="container mx-auto px-20 h-full flex flex-col md:flex-row items-start justify-between relative z-10 pt-8">
-      <div className="flex-1 space-y-4 max-w-md mt-45"> 
-        <h1 className="text-6xl font-black text-swirl-brown leading-tight">
+  <header className="relative min-h-[600px] pt-10 pb-24 font-fredoka font-bold flex flex-col justify-center items-center bg-cover bg-center"
+          style={{ backgroundImage: "url('src/assets/bg-only.png')" }}> 
+    
+    <div className="container mx-auto px-10 h-full flex flex-col md:flex-row items-center justify-between relative z-10">
+      
+      <div className="flex-1 space-y-6 max-w-lg mb-10 md:mb-0"> 
+        <h1 className="text-6xl font-black text-swirl-brown leading-[1.1]">
           your stop for <br />
-          cinnamon swirls
+          <span className="text-7xl">cinnamon swirls</span>
         </h1>
-        <p className="text-swirl-brown font-medium text-lg">
-          baked fresh daily, served warm at your stop.
+        <p className="text-swirl-brown font-semibold text-xl uppercase tracking-wide opacity-80">
+          baked fresh daily, <br/> served warm at your stop.
         </p>
-        <button className="bg-swirl-brown text-swirl-cream px-8 py-3 rounded-full text-lg font-semibold shadow-lg hover:scale-105 transition">
-          Order Now
+        <button className="bg-swirl-brown text-swirl-cream px-8 py-4 rounded-full text-lg font-black shadow-xl hover:scale-105 transition flex items-center gap-3 uppercase">
+          Board your order
+          <span className="bg-white text-swirl-brown rounded-full w-6 h-6 flex items-center justify-center text-sm">➔</span>
         </button>
       </div>
       
       <div className="flex-1 relative flex justify-center md:justify-end">
+        {/* Update to your box of 6 image from the screenshot */}
         <img 
-          src="src/assets/double-express.png" 
-          alt="Half & Half Double Express" 
-          className="w-full max-w-[650px] object-contain drop-shadow-2xl z-10" 
+          src="src/assets/assorted-6.png" 
+          alt="Box of Swirls" 
+          className="w-full max-w-[600px] object-contain drop-shadow-2xl z-10" 
         />
-        <div className="absolute -bottom-10 right-0 w-[110%] h-24 bg-[#E2C4A2] rounded-[100%] blur-2xl z-0 opacity-60" />
       </div>
+    </div>
+
+    {/* Floating Features Banner */}
+    <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-11/12 max-w-5xl bg-white/95 backdrop-blur-md rounded-full shadow-xl flex justify-between items-center px-10 py-5 text-swirl-brown font-bold text-lg divide-x-2 divide-swirl-brown/10 z-20">
+      <div className="flex-1 flex items-center justify-center gap-3 px-4">❤️ made with love</div>
+      <div className="flex-1 flex items-center justify-center gap-3 px-4">🌀 soft, warm, and gooey</div>
+      <div className="flex-1 flex items-center justify-center gap-3 px-4">🎁 perfect for any occasion</div>
+      <div className="flex-1 flex items-center justify-center gap-3 px-4">🛵 pickup or delivery within Cebu</div>
     </div>
   </header>
 );
 
 const Featured = () => (
-  <section className="container mx-auto px-20 py-20 font-fredoka">
-    <h2 className="text-4xl font-black text-swirl-brown mb-10">Featured</h2>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-      <img src="src/assets/giveaway-post.png" alt="Giveaway" className="w-full rounded-3xl shadow-xl hover:scale-[1.02] transition duration-300" />
-      <img src="src/assets/how-to-join.png" alt="How to join" className="w-full rounded-3xl shadow-xl hover:scale-[1.02] transition duration-300" />
+  <section className="container mx-auto px-10 pt-32 pb-16 font-fredoka">
+    <h2 className="text-4xl font-black text-swirl-brown mb-8 flex items-center gap-2">
+      Featured ✨
+    </h2>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <img src="src/assets/ga-landscape-1.png" alt="Giveaway" className="w-full rounded-3xl shadow-lg hover:shadow-xl transition duration-300" />
+      <img src="src/assets/ga-landscape-2.png" alt="How to join" className="w-full rounded-3xl shadow-lg hover:shadow-xl transition duration-300" />
     </div>
   </section>
 );
 
-const Menu = () => {
-  const [selectedFlavor, setSelectedFlavor] = useState<any>(null);
+const Bestsellers = ({ onSelectFlavor }: { onSelectFlavor: (flavor: any) => void }) => {
   const items = [
-    { id: 1, name: "Chocolate", sub: "HEAVEN", img: "chocolate.png" },
-    { id: 2, name: "Strawberries", sub: "& CREAM", img: "strawberry.png" },
-    { id: 3, name: "Biscoff", sub: "BUTTER", img: "biscoff.png" },
+    { id: 1, name: "Assorted Box of Swirls", desc: "Choose your own flavors!", price: 249, rating: "5.0", img: "assorted4.png" },
+    { id: 2, name: "Chocolate Heaven", desc: "Rich chocolate dough with chocolate chunks and creamy frosting", price: 59, rating: "5.0", img: "choc-heaven.png" },
+    { id: 3, name: "Assorted Bites", desc: "Cinnamon swirl topped with strawberry cream and jam", price: 269, rating: "5.0", img: "classic-bites.png" },
+    { id: 4, name: "Biscoff Butter", desc: "Soft cinnamon swirl layered with Biscoff frosting, drizzle, and crumble", price: 65, rating: "5.0", img: "biscoff-butter.png" },
   ];
 
   return (
-    <section id="menu-section" className="container mx-auto px-20 py-20 font-fredoka scroll-mt-32">
-      <h2 className="text-4xl font-black text-swirl-brown mb-10">Menu</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <section id="menu-section" className="container mx-auto px-10 py-16 font-fredoka scroll-mt-32">
+      <h2 className="text-4xl font-black text-swirl-brown mb-8 flex items-center gap-2">
+        Bestsellers ✨
+      </h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {items.map((item) => (
-          <div 
-            key={item.id} 
-            onClick={() => setSelectedFlavor(item)} 
-            className="bg-swirl-cream rounded-[40px] p-6 flex flex-col items-center shadow-lg hover:shadow-2xl transition-all cursor-pointer group"
-          >
-            <div className="w-full aspect-square overflow-hidden mb-4 text-center">
-              <img src={`src/assets/${item.img}`} alt={item.name} className="w-full h-full object-contain group-hover:scale-110 transition duration-500" />
+          <div key={item.id} className="bg-white rounded-3xl overflow-hidden shadow-lg border border-swirl-brown/10 flex flex-col group">
+            <div className="bg-[#EBD5B3] w-full h-56 p-6 flex items-center justify-center">
+              <img src={`src/assets/${item.img}`} alt={item.name} className="w-full h-full object-contain group-hover:scale-110 transition duration-500 drop-shadow-lg" />
             </div>
-            <h3 className="text-2xl font-bold text-swirl-brown uppercase">{item.name}</h3>
-            <p className="text-xl font-medium text-[#C5957C] opacity-70 italic">{item.sub}</p>
+            <div className="p-6 flex flex-col flex-1 justify-between">
+              <div>
+                <h3 className="text-xl font-black text-swirl-brown mb-2 leading-tight">{item.name}</h3>
+                <p className="text-sm text-swirl-brown/70 font-medium leading-snug mb-4">{item.desc}</p>
+              </div>
+              <div>
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-sm font-bold text-swirl-brown/50">⭐ {item.rating}</span>
+                  <span className="text-2xl font-black text-swirl-brown">₱{item.price}</span>
+                </div>
+                <button 
+                  onClick={() => onSelectFlavor(item)}
+                  className="w-full bg-swirl-brown text-white py-3 rounded-full font-bold shadow-md hover:scale-[1.02] active:scale-95 transition"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
           </div>
         ))}
       </div>
-
-      {selectedFlavor && (
-        <OrderModal flavor={selectedFlavor} onClose={() => setSelectedFlavor(null)} />
-      )}
     </section>
   );
 };
 
+const SweetMoments = () => (
+  <section className="container mx-auto px-10 py-16 font-fredoka overflow-hidden">
+    <div className="mb-8">
+      <h2 className="text-4xl font-black text-swirl-brown mb-2">Sweet Moments with Swirl Station</h2>
+      <p className="text-swirl-brown/70 font-medium">Tag @swirlstation.cebu on ig!</p>
+    </div>
+    
+    <div className="flex justify-center items-center gap-4 h-[400px]">
+      <img src="src/assets/lou.jpg" alt="Customer 1" className="h-[250px] w-48 object-cover rounded-[30px] shadow-lg opacity-90" />
+      <img src="src/assets/lami.jpg" alt="Customer 2" className="h-[320px] w-56 object-cover rounded-[30px] shadow-lg" />
+      <img src="src/assets/sas.jpg" alt="Customer 3" className="h-full w-72 object-cover rounded-[40px] shadow-xl z-10 scale-105" />
+      <img src="src/assets/meagan.jpg" alt="Customer 4" className="h-[320px] w-56 object-cover rounded-[30px] shadow-lg" />
+      <img src="src/assets/dayn.jpg" alt="Customer 5" className="h-[250px] w-48 object-cover rounded-[30px] shadow-lg opacity-90" />
+    </div>
+  </section>
+);
+
+const Footer = () => (
+  <footer className="bg-swirl-brown text-swirl-cream font-fredoka pt-16 pb-8 px-10 mt-20">
+    <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 border-b border-swirl-cream/20 pb-10">
+      
+      {/* Brand & Socials */}
+      <div className="space-y-4">
+        <img src="src/assets/swirl-station-cream-logo.png" alt="Logo" className="w-48 mb-6" />
+        <div className="flex gap-4 text-2xl">
+          <a href="#" className="hover:text-white transition">📘</a> {/* Replace with actual SVG/icons */}
+          <a href="#" className="hover:text-white transition">📸</a>
+          <a href="#" className="hover:text-white transition">🎵</a>
+        </div>
+      </div>
+
+      {/* Help Links */}
+      <div className="flex flex-col space-y-3 font-medium">
+        <h4 className="text-xl font-bold mb-2">Help</h4>
+        <a href="#" className="opacity-80 hover:opacity-100 transition">FAQs</a>
+        <a href="#" className="opacity-80 hover:opacity-100 transition">Ordering & Payment</a>
+        <a href="#" className="opacity-80 hover:opacity-100 transition">Delivery & Pickup</a>
+        <a href="#" className="opacity-80 hover:opacity-100 transition">Terms & Conditions</a>
+      </div>
+
+      {/* Contact Info */}
+      <div className="flex flex-col space-y-3 font-medium">
+        <h4 className="text-xl font-bold mb-2">Contact Us</h4>
+        <p className="opacity-80">+63 917 312 3663</p>
+        <p className="opacity-80">swirlstation.cebu@gmail.com</p>
+        <p className="opacity-80">Cebu City, Philippines</p>
+      </div>
+
+      {/* Payment Methods */}
+      <div className="flex flex-col space-y-3 font-medium">
+        <h4 className="text-xl font-bold mb-2">We accept</h4>
+        <p className="opacity-80">GCash</p>
+        <p className="opacity-80">Maya</p>
+        <p className="opacity-80">BPI/UnionBank</p>
+        <p className="opacity-80">Cash on Delivery</p>
+      </div>
+
+    </div>
+    <div className="text-center mt-8 opacity-50 font-medium text-sm">
+      © 2026 Swirl Station. All rights Reserved.
+    </div>
+  </footer>
+);
+
+/* --- KEEP YOUR EXISTING MODAL EXACTLY AS IT IS --- */
 const OrderModal = ({ flavor, onClose }: { flavor: any; onClose: () => void }) => {
   const [quantity, setQuantity] = useState(1);
   const [size, setSize] = useState("1pc");
-  const prices: { [key: string]: number } = { 
-  "1pc": 59, 
-  "box4": 229, 
-  "box6": 339 
-};
+  const prices: { [key: string]: number } = { "1pc": flavor.price || 59, "box4": 229, "box6": 339 };
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
       <div className="bg-swirl-cream w-full max-w-md rounded-[40px] overflow-hidden shadow-2xl relative p-8 flex flex-col items-center animate-in zoom-in duration-300">
         <button onClick={onClose} className="absolute top-6 right-6 text-swirl-brown text-2xl hover:rotate-90 transition">✕</button>
-        <img src={`src/assets/${flavor.img}`} alt={flavor.name} className="w-48 h-48 object-contain mb-4" />
-        <h2 className="text-3xl font-black text-swirl-brown mb-6 uppercase">{flavor.name}</h2>
+        <img src={`src/assets/${flavor.img}`} alt={flavor.name} className="w-48 h-48 object-contain mb-4 drop-shadow-xl" />
+        <h2 className="text-3xl font-black text-swirl-brown mb-6 uppercase text-center leading-tight">{flavor.name}</h2>
         
-        <div className="w-full space-y-3 mb-8">
+        <div className="w-full space-y-3 mb-8 text-swirl-brown">
           {Object.entries(prices).map(([id, price]) => (
-            <button
-              key={id}
-              onClick={() => setSize(id)}
-              className={`w-full flex justify-between px-6 py-4 rounded-2xl border-2 transition ${size === id ? "border-swirl-brown bg-swirl-brown text-white" : "border-swirl-brown/10"}`}
-            >
-              <span className="font-bold uppercase">{id.replace('box', 'Box of ')}</span>
+            <button key={id} onClick={() => setSize(id)} className={`w-full flex justify-between px-6 py-4 rounded-2xl border-2 transition ${size === id ? "border-swirl-brown bg-swirl-brown text-white" : "border-swirl-brown/20 bg-white"}`}>
+              <span className="font-bold">{id.replace('box', 'Box of ')}</span>
               <span className="font-black">₱{price}</span>
             </button>
           ))}
         </div>
 
-        <div className="flex items-center gap-6 w-full">
-          <div className="flex items-center bg-white rounded-full px-4 py-2 border border-swirl-brown/10">
-            <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="text-2xl px-2">-</button>
+        <div className="flex items-center gap-6 w-full text-swirl-brown">
+          <div className="flex items-center bg-white rounded-full px-4 py-2 border border-swirl-brown/20">
+            <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="text-2xl px-2 font-black">-</button>
             <span className="text-xl font-bold w-8 text-center">{quantity}</span>
-            <button onClick={() => setQuantity(quantity + 1)} className="text-2xl px-2">+</button>
+            <button onClick={() => setQuantity(quantity + 1)} className="text-2xl px-2 font-black">+</button>
           </div>
-          <button onClick={onClose} className="flex-1 bg-swirl-brown text-white py-4 rounded-full font-bold">
+          <button onClick={onClose} className="flex-1 bg-swirl-brown text-white py-4 rounded-full font-bold shadow-lg">
             Add to Cart — ₱{prices[size] * quantity}
           </button>
         </div>
@@ -150,22 +236,27 @@ const OrderModal = ({ flavor, onClose }: { flavor: any; onClose: () => void }) =
 
 export default function App() {
   const [showAuth, setShowAuth] = useState(false);
+  const [selectedFlavor, setSelectedFlavor] = useState<any>(null); // Lifted state up
 
   return (
     <div 
-      className="min-h-screen bg-swirl-bg bg-cover bg-no-repeat bg-top font-fredoka selection:bg-swirl-brown selection:text-white scroll-smooth"
-      style={{ backgroundImage: "url('src/assets/bg2.png')" }}
+      className="min-h-screen bg-swirl-bg bg-cover bg-fixed font-fredoka selection:bg-swirl-brown selection:text-white scroll-smooth"
+      style={{ backgroundImage: "url('src/assets/bg-only.png')" }} 
     >
       <Navbar onLoginClick={() => setShowAuth(true)} />
       <Header />
       <Featured />
-      <Menu />
-
-      {showAuth && <AuthPage onClose={() => setShowAuth(false)} />}
       
-      <footer className="py-20 text-center text-swirl-brown font-bold opacity-50">
-        © 2026 Swirl Station. All rights Reserved.
-      </footer>
+      <Bestsellers onSelectFlavor={setSelectedFlavor} />
+      
+      <SweetMoments />
+      <Footer />
+
+      {/* Render Modals over everything */}
+      {selectedFlavor && (
+        <OrderModal flavor={selectedFlavor} onClose={() => setSelectedFlavor(null)} />
+      )}
+      {showAuth && <AuthPage onClose={() => setShowAuth(false)} />}
     </div>
   );
 }
