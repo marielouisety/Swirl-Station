@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import AuthPage from "./Login"; 
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
+import MenuPage from "./Menu";
 
-const Navbar = ({ onLoginClick, user }: { onLoginClick: () => void; user: any }) => {
+const Navbar = ({ onLoginClick, user, setView }: { onLoginClick: () => void; user: any; setView: (v: "home" | "menu") => void }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false); // dropdown for logout
   const displayName = user?.email ? user.email.split('@')[0] : "";
 
@@ -13,10 +14,22 @@ const Navbar = ({ onLoginClick, user }: { onLoginClick: () => void; user: any })
       <img src="src/assets/swirl-station-cream-logo.png" alt="Swirl Station Logo" className="h-10 w-auto" />
       
       <div className="flex gap-10 items-center font-bold text-sm uppercase">
-        <a href="#" className="hover:text-white transition">Home</a>
-        <a href="#bestsellers-section" className="hover:text-white transition">Bestsellers</a>
-        <a href="#" className="hover:text-white transition">About Us</a>
-        <a href="#" className="hover:text-white transition">Contact Us</a>
+        <button 
+          onClick={() => setView('home')} 
+          className="hover:text-white transition cursor-pointer"
+        >
+          Home
+        </button>
+        
+        <button 
+          onClick={() => setView('menu')} 
+          className="hover:text-white transition cursor-pointer"
+        >
+          Menu
+        </button>
+        
+        <button className="hover:text-white transition cursor-pointer">About Us</button>
+        <button className="hover:text-white transition cursor-pointer">Contact Us</button>
         
         <div className="flex gap-6 items-center ml-4">
             <span className="cursor-pointer hover:scale-110 transition text-2xl">🛒</span>
@@ -241,10 +254,9 @@ const Footer = () => (
   </footer>
 );
 
-/* --- KEEP YOUR EXISTING MODAL EXACTLY AS IT IS --- */
 const OrderModal = ({ flavor, onClose }: { flavor: any; onClose: () => void }) => {
   const [quantity, setQuantity] = useState(1);
-  const [size, setSize] = useState("1pc");
+  const [size, setSize] = useState("1 pc");
   const prices: { [key: string]: number } = { "1pc": flavor.price || 59, "box4": 229, "box6": 339 };
 
   return (
@@ -279,6 +291,7 @@ const OrderModal = ({ flavor, onClose }: { flavor: any; onClose: () => void }) =
 };
 
 export default function App() {
+  const [view, setView] = useState<"home" | "menu">("home");
   const [showAuth, setShowAuth] = useState(false);
   const [selectedFlavor, setSelectedFlavor] = useState<any>(null); // Lifted state up
   const [user, setUser] = useState<any>(null);
@@ -294,13 +307,26 @@ export default function App() {
     <div 
       className="min-h-screen bg-swirl-cream font-fredoka selection:bg-swirl-brown selection:text-white scroll-smooth"
     >
-      <Navbar user={user}onLoginClick={() => setShowAuth(true)} />
-      <Header />
+      <Navbar 
+        user={user}
+        onLoginClick={() => setShowAuth(true)} 
+        setView={setView}
+      />
+
+      {view === "home" ? (
+        <>
+          <Header />
+        </>
+      ) : (
+        <MenuPage />
+      )}
+
       <Featured />
       
       <Bestsellers onSelectFlavor={setSelectedFlavor} />
       
       <SweetMoments />
+      
       <Footer />
 
       {/* Render Modals over everything */}
