@@ -38,16 +38,19 @@ const Navbar = ({ onLoginClick }: { onLoginClick: () => void }) => (
 );
 
 const Header = () => (
-  <header className="relative min-h-[600px] pt-10 pb-24 font-fredoka font-bold flex flex-col justify-center items-center bg-cover bg-center"
+  <header className="relative min-h-[800px] pt-10 pb-24 font-fredoka font-bold flex flex-col justify-center items-center bg-cover bg-center"
           style={{ backgroundImage: "url('src/assets/bg-only.png')" }}> 
     
-    <div className="container mx-auto px-10 h-full flex flex-col md:flex-row items-center justify-between relative z-10">
+    <div className="container mx-auto px-40 h-full flex flex-col md:flex-row items-center justify-between relative z-10">
       
       <div className="flex-1 space-y-6 max-w-lg mb-10 md:mb-0"> 
-        <h1 className="text-6xl font-black text-swirl-brown leading-[1.1]">
-          your stop for <br />
-          <span className="text-7xl">cinnamon swirls</span>
+        <h1 className="text-5xl font-fredoka text-swirl-brown leading-[1.1]">
+          your stop for
+          <h1 className="text-6xl font-gloock text-swirl-brown leading-[1.1]">
+          <span className="text-8xl">cinnamon swirls</span>
+          </h1>
         </h1>
+        
         <p className="text-swirl-brown font-semibold text-xl uppercase tracking-wide opacity-80">
           baked fresh daily, <br/> served warm at your stop.
         </p>
@@ -62,7 +65,7 @@ const Header = () => (
         <img 
           src="src/assets/assorted-6.png" 
           alt="Box of Swirls" 
-          className="w-full max-w-[600px] object-contain drop-shadow-2xl z-10" 
+          className="w-full max-w-[1000px] object-contain drop-shadow-2xl z-10" 
         />
       </div>
     </div>

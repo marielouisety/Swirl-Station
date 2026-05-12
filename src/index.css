@@ -28,8 +28,16 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Gloock';
+  src: url('/src/fonts/Gloock-Regular.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
 @theme {
   --font-fredoka: "Fredoka", sans-serif;
+  --font-gloock: "Gloock", serif;
 
   --color-swirl-bg: #EBD5B3;
   --color-swirl-cream: #FCF5DF;
